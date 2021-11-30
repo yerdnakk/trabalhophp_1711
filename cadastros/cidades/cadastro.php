@@ -1,33 +1,42 @@
 <?php
     if (isset($_POST['gravar'])) {
         try {
-
-            $nome = $_POST['nome'];
-            $estado = $_POST['estado'];
-            $codigo = $_POST['codigo'];
-
-
             $stmt = $conn->prepare(
-                'INSERT INTO cidades (nome, estado, codigo) values (:nome, :estado, :codigo)');
-
-            $stmt->bindParam(':nome', $nome);          
-            $stmt->bindParam(':estado', $estado);
-            $stmt->bindParam(':codigo', $codigo);
-            $stmt->execute();
+                'INSERT INTO cidades (nome,codigo,estado) values (:nome,:sigla,:estado)');
+            //$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute(array('nome' => $_POST['nome'],'sigla' => $_POST['codigo'], 'estado' => $_POST['estado']));
+            //$stmt->execute();
         } catch(PDOException $e) {
             echo 'ERROR: ' . $e->getMessage();
         }
     }
 ?>
-
 <form method="post">
     <div class="form-group">
-        <label for="nome">Nome da cidade</label>
-        <input type="text" class="form-control" name="nome" id="nome" placeholder="nome">
+        <label for="nome">Nome</label>
+        <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome">
+
+        <label for="codigo">Codigo</label>
+        <input type="number" class="form-control" name="codigo" id="codigo" placeholder="Codigo">
+
+    <?php
+        $stmt = $conn->prepare('SELECT * FROM estados');
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+    ?>
+    <div class="form-group">
         <label for="estado">Estado</label>
-        <input type="number" class="form-control" name="estado" id="estado" placeholder="estado">
-        <label for="codigo">Código da cidade</label>
-        <input type="number" class="form-control" name="codigo" id="codigo" placeholder="codigo">
+        <select class="form-control" name="estado" id="estado">
+            <option value="">** Selecione **</option>
+            <?php
+                foreach ($result as $l) {
+                    ?>
+                        <option selected value="<?=$l['id']?>"><?=$l['sigla']?> - <?=$l['nome']?></option>
+                    <?php
+                }
+            ?>
+        </select>
     </div>
-    <input type="submit" name="gravar" value="Gravar">
+    </div>
+    <input type="submit" name="gravar" value="Gravar" class="btn btn-success">
 </form>

@@ -8,4 +8,4 @@
     define('DB_SERVER','localhost');
     define('DB_USER','root');
     define('DB_SENHA','');
-    define('DB_BASE','glaycon');
+    define('DB_BASE','marcondes');

@@ -1,4 +1,6 @@
 <?php
+    $Pagina = $_GET['offset'] * 5;
+    $Offset = $Pagina - 5;
     if (isset($_GET['id']))
         $id = $_GET['id'];
  
@@ -7,7 +9,10 @@
             $stmt = $conn->prepare('SELECT * FROM pessoas WHERE id = :id');
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         } else {
-            $stmt = $conn->prepare('SELECT * FROM pessoas');
+            $stmt = $conn->prepare('SELECT * FROM pessoas
+                                    LIMIT :offset,:pag ');
+            $stmt->bindParam(':offset',$Offset, PDO::PARAM_INT);
+            $stmt->bindParam(':pag', $Pagina, PDO::PARAM_INT); 
         }
         //$stmt->execute(array('id' => $id));
         $stmt->execute();

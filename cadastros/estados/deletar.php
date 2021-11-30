@@ -2,7 +2,7 @@
     if (isset($_POST['deletar'])) {
         try {
             $stmt = $conn->prepare(
-                'DELETE FROM pessoas WHERE id = :id');
+                'DELETE FROM estados WHERE id = :id');
             //$stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute(array('id' => $_GET['id']));
             //$stmt->execute();
@@ -18,7 +18,7 @@
     }
  
     if (isset($_GET['id'])) {
-        $stmt = $conn->prepare('SELECT * FROM pessoas WHERE id = :id');
+        $stmt = $conn->prepare('SELECT * FROM estados WHERE id = :id');
         $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
     }
     //$stmt->execute(array('id' => $id));
@@ -27,6 +27,7 @@
 ?>
 <form method="post">
     <input type="text" name="nome" value="<?=$r[0]['nome']?>" disabled>
+    <input type="text" name="sigla" value="<?=$r[0]['sigla']?>" disabled>
     Deseja realmente excluír esse cadastro?
     <input type="submit" name="deletar" value="Confirmar" class="btn btn-danger">
 </form>
